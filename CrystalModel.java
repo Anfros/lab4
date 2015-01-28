@@ -14,7 +14,7 @@ public class CrystalModel {
 	public CrystalModel(int size){
 		this.size=size;
 		this.escapeRadius=size/2-1;
-		this.dropRadius=this.escapeRadius*8/10;
+		this.dropRadius=(this.escapeRadius*8)/10;
 		reset();
 	}
 
@@ -25,15 +25,16 @@ public class CrystalModel {
 	 */
 	boolean crystallizeOneIon(){
 		dropNewIon();
-
 		while(!anyNeighbours(getX(),getX())){
 			if (rand.nextBoolean())
-				newIon[rand.nextInt(1)]++;
+				newIon[rand.nextInt(2)]++;
 			else
-				newIon[rand.nextInt(1)]--;
+				newIon[rand.nextInt(2)]--;
 			
-			if(outsideCircle(escapeRadius,getX(),getY()))
+			if(outsideCircle(escapeRadius,getX(),getY())){
 					dropNewIon();
+                    System.out.println ("bajs123");
+            }
 		}
 		
 		representation[xBathToModelRep(newIon[0])][yBathToModelRep(newIon[1])]=true;
@@ -59,15 +60,15 @@ public class CrystalModel {
 
 	//- kollar om position x,y är utanför (eller på) cirkeln med radie r. (använd pythagoras)
 	boolean outsideCircle(int r, int x, int y){
-		return (sqrt(pow(x,2)+pow(y,2))>=r);
+		return (r<=sqrt(pow(x,2)+pow(y,2)));
 	}		
 
 	//- kollar om jonen på position x,y har några grannar som kristalliserats.
 	boolean anyNeighbours(int x, int y){
-		return(this.representation[xBathToModelRep(x+1)][yBathToModelRep(y)]||
-				this.representation[xBathToModelRep(x)][yBathToModelRep(y+1)]||
-				this.representation[xBathToModelRep(x-1)][yBathToModelRep(y)]||
-				this.representation[xBathToModelRep(x)][yBathToModelRep(y-1)]
+        return((this.representation[xBathToModelRep(x)+1][yBathToModelRep(y)]||
+				this.representation[xBathToModelRep(x)][yBathToModelRep(y)+1])||
+				(this.representation[xBathToModelRep(x)-1][yBathToModelRep(y)]||
+				this.representation[xBathToModelRep(x)][yBathToModelRep(y)-1])
 				);
 
 	}		
