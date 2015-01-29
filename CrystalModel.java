@@ -9,32 +9,33 @@ public class CrystalModel {
 
 	private boolean[][] representation;
 	private int[] newIon = new int[2];
-	Random rand=new Random();
+	private Random rand=new Random();
 
 	public CrystalModel(int size){
 		this.size=size;
-		this.escapeRadius=size/2-1;
+		this.escapeRadius=size/2;
 		this.dropRadius=(this.escapeRadius*8)/10;
 		reset();
 	}
 
 	/*släpper en ny jon (med hjälp av dropNewIon() ) och flyttar sedan jonen ett steg åt gången 
 	tills den kristalliseras. Kommer den utanför flyktcirkeln så släpps en ny jon. Se beskrivningen 
-	ovan för mer detaljer. Metoden returnerar false när kristallen är klar (dvs när sista jonen 
 			kristalliseras på startcirkeln) och true om vi kan kristallisera fler joner.
 	 */
-	boolean crystallizeOneIon(){
+	public boolean crystallizeOneIon(){
 		dropNewIon();
 		while(!anyNeighbours(getX(),getX())){
+			
 			if (rand.nextBoolean())
 				newIon[rand.nextInt(2)]++;
 			else
 				newIon[rand.nextInt(2)]--;
 
+			//System.out.println (outsideCircle(escapeRadius,getX(),getY()));
+			//System.out.println(getX()+", "+getY());
 			if(outsideCircle(escapeRadius,getX(),getY())){
-				System.out.println (outsideCircle(escapeRadius,getX(),getY()));
+				//System.out.println (outsideCircle(escapeRadius,getX(),getY()));
 				dropNewIon();
-				System.out.println (outsideCircle(escapeRadius,getX(),getY()));
 			}
 		}
 
@@ -50,44 +51,44 @@ public class CrystalModel {
 	ju kan läsa direkt i matrisen (eller vad man nu använder) men när vi skall rita 
 	så kommer vi inte enkelt åt matrisen)
 	 */
-	boolean getModelValue(int x, int y){
+	public boolean getModelValue(int x, int y){
 		return(this.representation[xBathToModelRep(x)][yBathToModelRep(y)]);
 
 
 	}		
 
 	//- kollar om position x,y är utanför (eller på) cirkeln med radie r. (använd pythagoras)
-	boolean outsideCircle(int r, int x, int y){
+	private boolean outsideCircle(int r, int x, int y){
 		return (pow(r,2)<=(pow(x,2)+pow(y,2)));
 	}		
 
 	//- kollar om jonen på position x,y har några grannar som kristalliserats.
-	boolean anyNeighbours(int x, int y){
-		return((this.representation[xBathToModelRep(x)+1][yBathToModelRep(y)]||
-				this.representation[xBathToModelRep(x)][yBathToModelRep(y)+1])||
-				(this.representation[xBathToModelRep(x)-1][yBathToModelRep(y)]||
-						this.representation[xBathToModelRep(x)][yBathToModelRep(y)-1])
+	private boolean anyNeighbours(int x, int y){
+		return(this.representation[xBathToModelRep(x)+1][yBathToModelRep(y)]||
+				this.representation[xBathToModelRep(x)][yBathToModelRep(y)+1]||
+				this.representation[xBathToModelRep(x)-1][yBathToModelRep(y)]||
+				this.representation[xBathToModelRep(x)][yBathToModelRep(y)-1]
 				);
 
 	}		
 
 	//- släpper en jon på startcirkeln (dvs slumpar fram en ny punkt x, y på startcirkeln).
-	void dropNewIon(){
+	private void dropNewIon(){
 		double rand =random();
 		this.newIon[0]=(int) Math.round(dropRadius*cos(rand*2*Math.PI));
 		this.newIon[1]=(int) Math.round(dropRadius*sin(rand*2*Math.PI));
 	}		
 
 	//- initierar modellen (dvs matrisen) och lägger en första kristalliserad jon mitt i "badet". 
-	void reset(){
-		representation=new boolean[size+2][size+2];
+	private void reset(){
+		representation=new boolean[size+4][size+4];
 		representation[xBathToModelRep(0)][yBathToModelRep(0)]=true;
 	}
 
 	/*och en yBathToModelRep (x Bath to ModelRepresentation) omvandlar en "bad"-kordinat 
 		till ett matris värde (om man använt en matris som representation). (Observera att dom inte ser likadana ut...) 
 	 */
-	int xBathToModelRep(int x){
+	private int xBathToModelRep(int x){
 		if(abs(x)>escapeRadius+2)
 			throw new IllegalArgumentException("Coordinate outside bath");
 		return x+escapeRadius+2;
@@ -95,22 +96,22 @@ public class CrystalModel {
 
 	}
 
-	int yBathToModelRep(int y){
+	private int yBathToModelRep(int y){
 		if(abs(y)>escapeRadius+2)
 			throw new IllegalArgumentException("Coordinate outside bath");
 		return -y+escapeRadius+2;
 	}
 
 
-	public int getX(){
+	private int getX(){
 		return newIon[0];
 	}
 
-	public int getY(){
+	private int getY(){
 		return newIon[1];
 	}
 
-	public int getRadius(){
+	private int getRadius(){
 		return escapeRadius;
 	}
 	/**

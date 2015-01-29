@@ -6,7 +6,7 @@ public class Test {
 			System.out.println(c.toString());
 			System.out.println("hej");
 			try{
-				Thread.sleep(10); // take a breake
+				Thread.sleep(10); // take a break
 			} 
 			// måste fångas, kan kastas av Thread.sleep men bör ej hända
 			catch (InterruptedException ex) {System.out.println("InterruptedException");
