@@ -16,6 +16,7 @@ public class CrystalModel {
 		this.escapeRadius=size/2;
 		this.dropRadius=(this.escapeRadius*8)/10;
 		reset();
+		System.out.println();
 	}
 
 	/*släpper en ny jon (med hjälp av dropNewIon() ) och flyttar sedan jonen ett steg åt gången 
@@ -24,22 +25,24 @@ public class CrystalModel {
 	 */
 	public boolean crystallizeOneIon(){
 		dropNewIon();
-		while(!anyNeighbours(getX(),getX())){
-			
-			if (rand.nextBoolean())
-				newIon[rand.nextInt(2)]++;
-			else
-				newIon[rand.nextInt(2)]--;
-
-			//System.out.println (outsideCircle(escapeRadius,getX(),getY()));
-			//System.out.println(getX()+", "+getY());
+		
+			while(!anyNeighbours(getX(),getY())){
 			if(outsideCircle(escapeRadius,getX(),getY())){
 				//System.out.println (outsideCircle(escapeRadius,getX(),getY()));
 				dropNewIon();
 			}
+			if (rand.nextBoolean())
+				newIon[rand.nextInt(2)]++;
+			else
+				newIon[rand.nextInt(2)]--;
+			//System.out.println(getX()+", " + getY());
+			
+			
+			//System.out.println (outsideCircle(escapeRadius,getX(),getY()));			
+			//System.out.println(anyNeighbours(getX(),getX()));
 		}
 
-		representation[xBathToModelRep(getX())][yBathToModelRep(getX())]=true;
+		representation[xBathToModelRep(getX())][yBathToModelRep(getY())]=true;
 		if (outsideCircle(dropRadius,getX(),getY()))
 			return false;
 		else
@@ -64,12 +67,10 @@ public class CrystalModel {
 
 	//- kollar om jonen på position x,y har några grannar som kristalliserats.
 	private boolean anyNeighbours(int x, int y){
-		return(this.representation[xBathToModelRep(x)+1][yBathToModelRep(y)]||
-				this.representation[xBathToModelRep(x)][yBathToModelRep(y)+1]||
-				this.representation[xBathToModelRep(x)-1][yBathToModelRep(y)]||
-				this.representation[xBathToModelRep(x)][yBathToModelRep(y)-1]
-				);
-
+		return(getModelValue(x+1,y)||
+				getModelValue(x-1,y)||
+				getModelValue(x,y+1)||
+				getModelValue(x,y-1));
 	}		
 
 	//- släpper en jon på startcirkeln (dvs slumpar fram en ny punkt x, y på startcirkeln).
@@ -82,7 +83,7 @@ public class CrystalModel {
 	//- initierar modellen (dvs matrisen) och lägger en första kristalliserad jon mitt i "badet". 
 	private void reset(){
 		representation=new boolean[size+4][size+4];
-		representation[xBathToModelRep(0)][yBathToModelRep(0)]=true;
+		setRepPos(0,0,true);
 	}
 
 	/*och en yBathToModelRep (x Bath to ModelRepresentation) omvandlar en "bad"-kordinat 
@@ -91,7 +92,7 @@ public class CrystalModel {
 	private int xBathToModelRep(int x){
 		if(abs(x)>escapeRadius+2)
 			throw new IllegalArgumentException("Coordinate outside bath");
-		return x+escapeRadius+2;
+		return x+representation.length/2;
 
 
 	}
@@ -99,10 +100,13 @@ public class CrystalModel {
 	private int yBathToModelRep(int y){
 		if(abs(y)>escapeRadius+2)
 			throw new IllegalArgumentException("Coordinate outside bath");
-		return -y+escapeRadius+2;
+		return -y+representation.length/2;
 	}
 
-
+	private void setRepPos(int x,int y, boolean state){
+		representation[xBathToModelRep(x)][yBathToModelRep(y)]=state;
+	}
+	
 	private int getX(){
 		return newIon[0];
 	}

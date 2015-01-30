@@ -4,7 +4,6 @@ public class Test {
 		CrystalModel c = new CrystalModel(50); 
 		while (c.crystallizeOneIon()) {
 			System.out.println(c.toString());
-			System.out.println("hej");
 			try{
 				Thread.sleep(10); // take a break
 			} 
