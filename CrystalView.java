@@ -1,66 +1,48 @@
+import static java.lang.Math.abs;
+
 import javax.swing.*;
 import java.awt.*;
-public class CrystalView extends JFrame{
+public class CrystalView extends JPanel{
 	int size;
-	DrawArea drawArea;
+	int bathSize;
+	CrystalModel model;
 
 	public CrystalView(CrystalModel model){
 		this.size=model.getSize();
-		this.setPreferredSize(new Dimension(size+200,size+400));
+		this.bathSize=model.getSize();
+		this.setPreferredSize(new Dimension(size+50,size+100));
 		setLayout(new BorderLayout());
-		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		drawArea=new DrawArea(model.getSize(),model);
-		add(drawArea,BorderLayout.NORTH);
-		pack();
+		this.model=model;
+		setBackground(Color.BLACK);
 		setVisible(true);
 		repaint();
 
 
 	}
-	public void repaint(){
-		drawArea.repaint();
-		super.repaint();
+	public void paintComponent(Graphics g){
+		super.paintComponent(g);
+		g.setColor(Color.RED);
+		for(int i=-model.getHighCoord();i<=model.getHighCoord();i++)
+			for(int j=-model.getHighCoord()+1;j<=model.getHighCoord();j++)
+				if (model.getModelValue(i,j))
+					g.fillRect(xBathToGraph(i),yBathToGraph(j),1,1);
+		g.setColor(Color.GREEN);
+		g.fillRect(xBathToGraph(model.getLastX()),yBathToGraph(model.getLastY()),1,1);
 	}
 
 	
 	
-	private int xGraphToBath(int x){
-		if(x<0||x>size)
-			throw new IllegalArgumentException("Coordinate outside bath");
-		return x-size/2;
+	private int xBathToGraph(int x){
+		if(abs(x)>model.getHighCoord())
+			throw new IllegalArgumentException("Coordinate outside bath!!!");
+		return x+model.getHighCoord();
 	}
 
-	private int yGraphToBath(int y){
-		if(y<0||y>size)
-			throw new IllegalArgumentException("Coordinate outside bath");
-		return y-size/2;
+	private int yBathToGraph(int y){
+		if(abs(y)>model.getHighCoord())
+			throw new IllegalArgumentException("Coordinate outside bath!!!");
+		return -y+model.getHighCoord();
 	}
-
-
-	private class DrawArea extends JPanel{
-		CrystalModel model;
-		
-		
-		public DrawArea(int size, CrystalModel model){
-			this.setSize(new Dimension(size,size));
-			this.model=model;
-			setVisible(true);
-		}
-		
-		public void paintComponent(Graphics g){
-			super.paintComponent(g);
-			for(int i=0;i<size;i++)
-				for(int j=0;j<size;j++)
-					if (model.getModelValue(xGraphToBath(i),yGraphToBath(j)))
-						g.fillRect(i,j,3,3);
-			
-			
-			
-		}
-		
-
-	}
-
 }
 
 

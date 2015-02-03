@@ -9,6 +9,7 @@ public class CrystalModel {
 
 	private boolean[][] representation;
 	private int[] newIon = new int[2];
+	private int[] lastIon=new int[2];
 	private Random rand=new Random();
 
 	public CrystalModel(int size){
@@ -38,6 +39,8 @@ public class CrystalModel {
 		}
 
 		representation[xBathToModelRep(getX())][yBathToModelRep(getY())]=true;
+		lastIon[0]=newIon[0];
+		lastIon[1]=newIon[1];
 		if (outsideCircle(dropRadius,getX(),getY()))
 			return false;
 		else
@@ -88,8 +91,6 @@ public class CrystalModel {
 		if(abs(x)>escapeRadius+2)
 			throw new IllegalArgumentException("Coordinate outside bath");
 		return x+representation.length/2;
-
-
 	}
 
 	private int yBathToModelRep(int y){
@@ -102,12 +103,24 @@ public class CrystalModel {
 		representation[xBathToModelRep(x)][yBathToModelRep(y)]=state;
 	}
 
-	private int getX(){
+	public int getX(){
 		return newIon[0];
 	}
 
-	private int getY(){
+	public int getY(){
 		return newIon[1];
+	}
+	
+	public int getLastX(){
+		return lastIon[0];
+	}
+
+	public int getLastY(){
+		return lastIon[1];
+	}
+	
+	public int getHighCoord(){
+		return size/2;
 	}
 
 	private int getRadius(){
