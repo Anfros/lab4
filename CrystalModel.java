@@ -18,6 +18,7 @@ public class CrystalModel {
 		reset();
 		System.out.println();
 	}
+	
 
 	/*släpper en ny jon (med hjälp av dropNewIon() ) och flyttar sedan jonen ett steg åt gången 
 	tills den kristalliseras. Kommer den utanför flyktcirkeln så släpps en ny jon. Se beskrivningen 
@@ -25,21 +26,15 @@ public class CrystalModel {
 	 */
 	public boolean crystallizeOneIon(){
 		dropNewIon();
-		
-			while(!anyNeighbours(getX(),getY())){
-			if(outsideCircle(escapeRadius,getX(),getY())){
-				//System.out.println (outsideCircle(escapeRadius,getX(),getY()));
-				dropNewIon();
-			}
+
+		while(!anyNeighbours(getX(),getY())){
 			if (rand.nextBoolean())
 				newIon[rand.nextInt(2)]++;
 			else
 				newIon[rand.nextInt(2)]--;
-			//System.out.println(getX()+", " + getY());
-			
-			
-			//System.out.println (outsideCircle(escapeRadius,getX(),getY()));			
-			//System.out.println(anyNeighbours(getX(),getX()));
+			if(outsideCircle(escapeRadius,getX(),getY())){
+				dropNewIon();
+			}
 		}
 
 		representation[xBathToModelRep(getX())][yBathToModelRep(getY())]=true;
@@ -106,7 +101,7 @@ public class CrystalModel {
 	private void setRepPos(int x,int y, boolean state){
 		representation[xBathToModelRep(x)][yBathToModelRep(y)]=state;
 	}
-	
+
 	private int getX(){
 		return newIon[0];
 	}
@@ -117,6 +112,10 @@ public class CrystalModel {
 
 	private int getRadius(){
 		return escapeRadius;
+	}
+	
+	public int getSize(){
+		return size;
 	}
 	/**
 	 * Returns the crystals state i.e. a string according to figure 3 i labPM. 

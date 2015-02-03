@@ -1,7 +1,7 @@
 
 public class Test {
 	public static void main(String[] args){
-		CrystalModel c = new CrystalModel(50); 
+		CrystalModel c = new CrystalModel(70); 
 		while (c.crystallizeOneIon()) {
 			System.out.println(c.toString());
 			try{

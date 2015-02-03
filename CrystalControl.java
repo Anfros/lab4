@@ -1,4 +1,4 @@
 
-public class CrystalControl {
+public class CrystalControl{
 
 }
