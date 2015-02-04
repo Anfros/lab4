@@ -1,6 +1,10 @@
 import static java.lang.Math.*;
 import java.util.*;
-
+/**
+ * 
+ * @author andef
+ *
+ */
 public class CrystalModel {
 
 	private final int size;
@@ -11,7 +15,10 @@ public class CrystalModel {
 	private int[] newIon = new int[2];
 	private int[] lastIon=new int[2];
 	private Random rand=new Random();
-
+	/**
+	 * 
+	 * @param size
+	 */
 	public CrystalModel(int size){
 		this.size=size;
 		this.escapeRadius=size/2;
@@ -19,11 +26,15 @@ public class CrystalModel {
 		reset();
 		System.out.println();
 	}
-	
+
 
 	/*släpper en ny jon (med hjälp av dropNewIon() ) och flyttar sedan jonen ett steg åt gången 
 	tills den kristalliseras. Kommer den utanför flyktcirkeln så släpps en ny jon. Se beskrivningen 
 			kristalliseras på startcirkeln) och true om vi kan kristallisera fler joner.
+	 */
+	/**
+	 * 
+	 * @return
 	 */
 	public boolean crystallizeOneIon(){
 		dropNewIon();
@@ -52,6 +63,12 @@ public class CrystalModel {
 	ju kan läsa direkt i matrisen (eller vad man nu använder) men när vi skall rita 
 	så kommer vi inte enkelt åt matrisen)
 	 */
+	/**
+	 * 
+	 * @param x
+	 * @param y
+	 * @return
+	 */
 	public boolean getModelValue(int x, int y){
 		return(this.representation[xBathToModelRep(x)][yBathToModelRep(y)]);
 
@@ -79,21 +96,26 @@ public class CrystalModel {
 	}		
 
 	//- initierar modellen (dvs matrisen) och lägger en första kristalliserad jon mitt i "badet". 
-	private void reset(){
+	/**
+	 * 
+	 */
+	public void reset(){
 		representation=new boolean[size+4][size+4];
 		setRepPos(0,0,true);
+		lastIon[0]=0;
+		lastIon[1]=0;
 	}
 
 	/*och en yBathToModelRep (x Bath to ModelRepresentation) omvandlar en "bad"-kordinat 
 		till ett matris värde (om man använt en matris som representation). (Observera att dom inte ser likadana ut...) 
 	 */
-	private int xBathToModelRep(int x){
+	private int xBathToModelRep(int x)throws IllegalArgumentException{
 		if(abs(x)>escapeRadius+2)
 			throw new IllegalArgumentException("Coordinate outside bath");
 		return x+representation.length/2;
 	}
 
-	private int yBathToModelRep(int y){
+	private int yBathToModelRep(int y)throws IllegalArgumentException{
 		if(abs(y)>escapeRadius+2)
 			throw new IllegalArgumentException("Coordinate outside bath");
 		return -y+representation.length/2;
@@ -102,23 +124,38 @@ public class CrystalModel {
 	private void setRepPos(int x,int y, boolean state){
 		representation[xBathToModelRep(x)][yBathToModelRep(y)]=state;
 	}
-
+	/**
+	 * 
+	 * @return
+	 */
 	public int getX(){
 		return newIon[0];
 	}
-
+	/**
+	 * 
+	 * @return
+	 */
 	public int getY(){
 		return newIon[1];
 	}
-	
+	/**
+	 * 
+	 * @return
+	 */
 	public int getLastX(){
 		return lastIon[0];
 	}
-
+/**
+ * 
+ * @return
+ */
 	public int getLastY(){
 		return lastIon[1];
 	}
-	
+/**
+ * 
+ * @return
+ */
 	public int getHighCoord(){
 		return size/2;
 	}
@@ -126,7 +163,10 @@ public class CrystalModel {
 	private int getRadius(){
 		return escapeRadius;
 	}
-	
+/**
+ * 
+ * @return
+ */
 	public int getSize(){
 		return size;
 	}

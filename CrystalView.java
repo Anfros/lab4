@@ -1,16 +1,23 @@
-import static java.lang.Math.abs;
-
+import static java.lang.Math.*;
 import javax.swing.*;
 import java.awt.*;
+/**
+ * 
+ * @author andef
+ *
+ */
 public class CrystalView extends JPanel{
 	int size;
 	int bathSize;
 	CrystalModel model;
-
+/**
+ * 
+ * @param model
+ */
 	public CrystalView(CrystalModel model){
 		this.size=model.getSize();
 		this.bathSize=model.getSize();
-		this.setPreferredSize(new Dimension(size+50,size+100));
+		this.setPreferredSize(new Dimension(size,size));
 		setLayout(new BorderLayout());
 		this.model=model;
 		setBackground(Color.BLACK);
@@ -19,6 +26,9 @@ public class CrystalView extends JPanel{
 
 
 	}
+	/**
+	 * 
+	 */
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
 		g.setColor(Color.RED);
