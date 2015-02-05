@@ -1,8 +1,10 @@
+//Anders Fredriksson och Henrik Petersson, labgrupp 131
 import static java.lang.Math.*;
 import java.util.*;
 /**
+ * A class to model a crystal forming in a electrolyte bath.
  * 
- * @author andef
+ * @author Anders Fredriksson and Henrik Petersson
  *
  */
 public class CrystalModel {
@@ -16,8 +18,8 @@ public class CrystalModel {
 	private int[] lastIon=new int[2];
 	private Random rand=new Random();
 	/**
-	 * 
-	 * @param size
+	 * Constructor
+	 * @param size size of bath
 	 */
 	public CrystalModel(int size){
 		this.size=size;
@@ -26,15 +28,18 @@ public class CrystalModel {
 		reset();
 		System.out.println();
 	}
-
-
-	/*släpper en ny jon (med hjälp av dropNewIon() ) och flyttar sedan jonen ett steg åt gången 
-	tills den kristalliseras. Kommer den utanför flyktcirkeln så släpps en ny jon. Se beskrivningen 
-			kristalliseras på startcirkeln) och true om vi kan kristallisera fler joner.
-	 */
+	
 	/**
-	 * 
-	 * @return
+	 * Standard constructor
+	 * Sets size of bath to 200x200
+	 */
+	public CrystalModel(){
+		this(200);
+	}
+
+	/**
+	 * Simulates the dropping of a new ion into the bath.
+	 * @return false if crystal is done, true otherwise.
 	 */
 	public boolean crystallizeOneIon(){
 		dropNewIon();
@@ -58,16 +63,11 @@ public class CrystalModel {
 			return true;
 	}
 
-	/*- returnerar "true" om det finns en kristalliserad jon på position x,y.
-	(Vi behöver nog inte denna i steg 1 för där använder vi toString som 
-	ju kan läsa direkt i matrisen (eller vad man nu använder) men när vi skall rita 
-	så kommer vi inte enkelt åt matrisen)
-	 */
 	/**
 	 * 
-	 * @param x
-	 * @param y
-	 * @return
+	 * @param x x-coordinate
+	 * @param y y-coordinate
+	 * @return true if position (x,y) contains an ion.
 	 */
 	public boolean getModelValue(int x, int y){
 		return(this.representation[xBathToModelRep(x)][yBathToModelRep(y)]);
@@ -75,12 +75,10 @@ public class CrystalModel {
 
 	}		
 
-	//- kollar om position x,y är utanför (eller på) cirkeln med radie r. (använd pythagoras)
 	private boolean outsideCircle(int r, int x, int y){
 		return (pow(r,2)<=(pow(x,2)+pow(y,2)));
 	}		
 
-	//- kollar om jonen på position x,y har några grannar som kristalliserats.
 	private boolean anyNeighbours(int x, int y){
 		return(getModelValue(x+1,y)||
 				getModelValue(x-1,y)||
@@ -88,16 +86,15 @@ public class CrystalModel {
 				getModelValue(x,y-1));
 	}		
 
-	//- släpper en jon på startcirkeln (dvs slumpar fram en ny punkt x, y på startcirkeln).
 	private void dropNewIon(){
 		double rand =random();
 		this.newIon[0]=(int) Math.round(dropRadius*cos(rand*2*Math.PI));
 		this.newIon[1]=(int) Math.round(dropRadius*sin(rand*2*Math.PI));
 	}		
 
-	//- initierar modellen (dvs matrisen) och lägger en första kristalliserad jon mitt i "badet". 
 	/**
-	 * 
+	 * Initiates the model with a clear field and then puts a crystal with one ion in the middle.
+	 * All data about previous models is lost.
 	 */
 	public void reset(){
 		representation=new boolean[size+4][size+4];
@@ -106,9 +103,6 @@ public class CrystalModel {
 		lastIon[1]=0;
 	}
 
-	/*och en yBathToModelRep (x Bath to ModelRepresentation) omvandlar en "bad"-kordinat 
-		till ett matris värde (om man använt en matris som representation). (Observera att dom inte ser likadana ut...) 
-	 */
 	private int xBathToModelRep(int x)throws IllegalArgumentException{
 		if(abs(x)>escapeRadius+2)
 			throw new IllegalArgumentException("Coordinate outside bath");
@@ -126,35 +120,35 @@ public class CrystalModel {
 	}
 	/**
 	 * 
-	 * @return
+	 * @return x-coordinate of ion currently moving in the bath
 	 */
 	public int getX(){
 		return newIon[0];
 	}
 	/**
 	 * 
-	 * @return
+	 * @return y-coordinate of ion currently moving in the bath
 	 */
 	public int getY(){
 		return newIon[1];
 	}
 	/**
 	 * 
-	 * @return
+	 * @return x-coordinate of last ion to attach itself to the crystal.
 	 */
 	public int getLastX(){
 		return lastIon[0];
 	}
 /**
  * 
- * @return
+ * @return y-coordinate of last ion to attach itself to the crystal.
  */
 	public int getLastY(){
 		return lastIon[1];
 	}
 /**
  * 
- * @return
+ * @return the highest x or y coordinate an ion can have and still be within the bath. The bath is completely symmetrical.  
  */
 	public int getHighCoord(){
 		return size/2;
@@ -165,7 +159,7 @@ public class CrystalModel {
 	}
 /**
  * 
- * @return
+ * @return the diameter of the bath.
  */
 	public int getSize(){
 		return size;

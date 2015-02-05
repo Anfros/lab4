@@ -1,3 +1,4 @@
+//Anders Fredriksson och Henrik Petersson, labgrupp 131
 import javax.swing.JFrame;
 
 public class Steg3 {
@@ -9,9 +10,9 @@ public class Steg3 {
 			control=new CrystalControl(Integer.parseInt(args[0]));
 		}catch(IllegalArgumentException e){
 			System.out.println(e.getMessage());
-			control=new CrystalControl(200);
+			control=new CrystalControl();
 		}catch(ArrayIndexOutOfBoundsException e){
-			control=new CrystalControl(200);
+			control=new CrystalControl();
 		}
 		frame.add(control);
 		frame.pack();

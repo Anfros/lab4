@@ -1,9 +1,10 @@
+//Anders Fredriksson och Henrik Petersson, labgrupp 131
 import static java.lang.Math.*;
-import javax.swing.*;
 import java.awt.*;
+import javax.swing.*;
 /**
- * 
- * @author andef
+ * A class to draw the state of a CrystalModel.
+ * @author Anders Fredriksson och Henrik Petersson
  *
  */
 public class CrystalView extends JPanel{
@@ -11,8 +12,8 @@ public class CrystalView extends JPanel{
 	int bathSize;
 	CrystalModel model;
 /**
- * 
- * @param model
+ * Constructor
+ * @param model the object, of type CrystalModel, which the CrystalView is to draw.
  */
 	public CrystalView(CrystalModel model){
 		this.size=model.getSize();
@@ -27,7 +28,7 @@ public class CrystalView extends JPanel{
 
 	}
 	/**
-	 * 
+	 * Draws the CrystalModel associated with this object. 
 	 */
 	public void paintComponent(Graphics g){
 		super.paintComponent(g);
@@ -54,7 +55,3 @@ public class CrystalView extends JPanel{
 		return -y+model.getHighCoord();
 	}
 }
-
-
-
-
