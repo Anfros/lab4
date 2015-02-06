@@ -8,7 +8,6 @@ import javax.swing.*;
  *
  */
 public class CrystalControl extends JPanel implements ActionListener{
-
 	private JButton speedButton=new JButton("ChangeSpeed");
 	private JButton runButton=new JButton("Run");
 	private JButton stopButton=new JButton("Stop");
@@ -40,7 +39,6 @@ public class CrystalControl extends JPanel implements ActionListener{
 		add(stopButton,BorderLayout.EAST);
 		timer=new Timer(10,this);
 		timer.setActionCommand("4");
-
 		this.setVisible(true);
 	}
 	/**
@@ -58,7 +56,7 @@ public class CrystalControl extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		switch (Integer.parseInt(e.getActionCommand())){
 		case 1:
-			if(timer.isRunning())
+			if(!timer.isRunning())
 				setSpeed();
 			break;
 		case 2:
@@ -69,7 +67,6 @@ public class CrystalControl extends JPanel implements ActionListener{
 			break;
 		case 3:
 			timer.stop();
-
 			break;
 		case 4:
 			if(crystalNotDone)
@@ -79,27 +76,35 @@ public class CrystalControl extends JPanel implements ActionListener{
 			view.repaint();
 			break;
 		}
-
 	}
 
 	private void setSpeed(){
-		String ans;
 		boolean done;
+		JOptionPane option =new JOptionPane();
+				Object ans;
+		option.createDialog("Set Speed");
+		JOptionPane.showInternalInputDialog(option,"Set Speed");
+		while(option.getValue()==JOptionPane.UNINITIALIZED_VALUE)
+		;
+		
+		ans=option.getValue();
+
 		do{
-			ans = JOptionPane.showInputDialog("Set Speed");
-			try{
-				speed=Integer.parseInt(ans);
+			if (ans==null){
 				done=true;
+			}else{
+				try{
+					speed=Integer.parseInt((String)ans);
+					if (speed<0)
+						throw new IllegalArgumentException("Speed needs to be positive");
+					done=true;
+				}catch(IllegalArgumentException e){
+					done=false;
+				}
 			}
-			catch(IllegalArgumentException e){
-				done=false;
-			}
-			catch(NullPointerException e){
-				done=false;
-			}
+
 		}while(!done);
 	}
-
 
 	private boolean runSomeSteps(){
 		int i=0;
@@ -110,9 +115,4 @@ public class CrystalControl extends JPanel implements ActionListener{
 		}while (i<speed&&crystalNotDone);
 		return crystalNotDone;
 	}
-
-
-
-
-
 }

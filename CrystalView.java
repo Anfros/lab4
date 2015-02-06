@@ -11,10 +11,10 @@ public class CrystalView extends JPanel{
 	int size;
 	int bathSize;
 	CrystalModel model;
-/**
- * Constructor
- * @param model the object, of type CrystalModel, which the CrystalView is to draw.
- */
+	/**
+	 * Constructor
+	 * @param model the object, of type CrystalModel, which the CrystalView is to draw.
+	 */
 	public CrystalView(CrystalModel model){
 		this.size=model.getSize();
 		this.bathSize=model.getSize();
@@ -24,8 +24,6 @@ public class CrystalView extends JPanel{
 		setBackground(Color.BLACK);
 		setVisible(true);
 		repaint();
-
-
 	}
 	/**
 	 * Draws the CrystalModel associated with this object. 
@@ -41,8 +39,6 @@ public class CrystalView extends JPanel{
 		g.fillRect(xBathToGraph(model.getLastX()),yBathToGraph(model.getLastY()),1,1);
 	}
 
-	
-	
 	private int xBathToGraph(int x){
 		if(abs(x)>model.getHighCoord())
 			throw new IllegalArgumentException("Coordinate outside bath!!!");

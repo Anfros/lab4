@@ -12,7 +12,6 @@ public class CrystalModel {
 	private final int size;
 	private final int dropRadius;
 	private final int escapeRadius;
-
 	private boolean[][] representation;
 	private int[] newIon = new int[2];
 	private int[] lastIon=new int[2];
@@ -28,7 +27,7 @@ public class CrystalModel {
 		reset();
 		System.out.println();
 	}
-	
+
 	/**
 	 * Standard constructor
 	 * Sets size of bath to 200x200
@@ -71,8 +70,6 @@ public class CrystalModel {
 	 */
 	public boolean getModelValue(int x, int y){
 		return(this.representation[xBathToModelRep(x)][yBathToModelRep(y)]);
-
-
 	}		
 
 	private boolean outsideCircle(int r, int x, int y){
@@ -139,17 +136,17 @@ public class CrystalModel {
 	public int getLastX(){
 		return lastIon[0];
 	}
-/**
- * 
- * @return y-coordinate of last ion to attach itself to the crystal.
- */
+	/**
+	 * 
+	 * @return y-coordinate of last ion to attach itself to the crystal.
+	 */
 	public int getLastY(){
 		return lastIon[1];
 	}
-/**
- * 
- * @return the highest x or y coordinate an ion can have and still be within the bath. The bath is completely symmetrical.  
- */
+	/**
+	 * 
+	 * @return the highest x or y coordinate an ion can have and still be within the bath. The bath is completely symmetrical.  
+	 */
 	public int getHighCoord(){
 		return size/2;
 	}
@@ -157,10 +154,9 @@ public class CrystalModel {
 	private int getRadius(){
 		return escapeRadius;
 	}
-/**
- * 
- * @return the diameter of the bath.
- */
+	/**
+	 * @return the diameter of the bath.
+	 */
 	public int getSize(){
 		return size;
 	}
