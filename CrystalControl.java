@@ -79,31 +79,30 @@ public class CrystalControl extends JPanel implements ActionListener{
 	}
 
 	private void setSpeed(){
-		boolean done;
-		JOptionPane option =new JOptionPane();
-				Object ans;
-		option.createDialog("Set Speed");
-		JOptionPane.showInternalInputDialog(option,"Set Speed");
-		while(option.getValue()==JOptionPane.UNINITIALIZED_VALUE)
-		;
-		
-		ans=option.getValue();
-
+		boolean done=false;
+		String ans;
 		do{
-			if (ans==null){
-				done=true;
-			}else{
-				try{
-					speed=Integer.parseInt((String)ans);
-					if (speed<0)
-						throw new IllegalArgumentException("Speed needs to be positive");
+			ans=JOptionPane.showInputDialog("Set speed");
+			try{
+				if (ans==null)
 					done=true;
-				}catch(IllegalArgumentException e){
+				else if (ans.length()==0)
+					done=true;
+				else if (Integer.parseInt(ans)<=0){
 					done=false;
+					JOptionPane.showMessageDialog(this,"Speed must be positive integer");
 				}
+					
+				else {
+					speed=Integer.parseInt(ans);
+					done=true;
+				}
+			}catch(IllegalArgumentException e){
+				JOptionPane.showMessageDialog(this,"Speed must be positive integer");
+				continue;
 			}
-
 		}while(!done);
+		System.out.println(speed);
 	}
 
 	private boolean runSomeSteps(){
