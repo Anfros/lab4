@@ -14,7 +14,7 @@ public class CrystalControl extends JPanel implements ActionListener{
 	private Timer timer;
 	private CrystalModel model;
 	private CrystalView view;
-	private int speed=5;
+	private int speed=50;
 	private boolean crystalNotDone=true;
 
 	/**
@@ -23,7 +23,7 @@ public class CrystalControl extends JPanel implements ActionListener{
 	 */
 	public CrystalControl(int size){
 		if (size<100||size>1000)
-			throw new IllegalArgumentException("size should be 100...1000, using default");
+			throw new IllegalArgumentException("size should be 100...1000");
 		setLayout(new BorderLayout());
 		model = new CrystalModel (size);
 		view = new CrystalView (model);
@@ -56,7 +56,12 @@ public class CrystalControl extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		switch (Integer.parseInt(e.getActionCommand())){
 		case 1:
-			if(!timer.isRunning())
+			if(timer.isRunning()){
+				timer.stop();
+				setSpeed();
+				timer .start();
+			}
+			else
 				setSpeed();
 			break;
 		case 2:
@@ -97,9 +102,9 @@ public class CrystalControl extends JPanel implements ActionListener{
 					speed=Integer.parseInt(ans);
 					done=true;
 				}
-			}catch(IllegalArgumentException e){
+			}catch(NumberFormatException e){
 				JOptionPane.showMessageDialog(this,"Speed must be positive integer");
-				continue;
+				done=false;
 			}
 		}while(!done);
 		System.out.println(speed);

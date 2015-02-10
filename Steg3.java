@@ -13,7 +13,7 @@ public class Steg3 {
 			JOptionPane.showMessageDialog(frame, e.getMessage()+", setting size to default");
 			control=new CrystalControl();
 		}catch(ArrayIndexOutOfBoundsException e){
-			JOptionPane.showMessageDialog(frame, "Should imput bath size on start");
+			JOptionPane.showMessageDialog(frame, "Should imput bath size on start, using default");
 			control=new CrystalControl();
 		}
 		frame.add(control);
